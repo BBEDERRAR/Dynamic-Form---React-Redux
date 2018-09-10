@@ -1,3 +1,6 @@
 export const CREATE_FIELD = 'CREATE_FIELD'
 export const EDIT_FIELD = 'EDIT_FIELD'
 export const DELETE_FIELD = 'DELETE_FIELD'
+export const EDIT_ACTION = 'EDIT_ACTION'
+export const EDIT_METHOD = 'EDIT_METHOD'
+export const UPDATE_VALUE = 'UPDATE_VALUE'

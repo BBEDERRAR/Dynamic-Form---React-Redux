@@ -21,3 +21,25 @@ export const deleteField = (id) => {
     }
 }
 
+export const editAction = (text) => {
+    return {
+        type: types.EDIT_ACTION,
+        payload: text
+    }
+}
+
+export const editMethod = (text) => {
+    return {
+        type: types.EDIT_METHOD,
+        payload: text
+    }
+}
+
+export const updateValue = (id,value) => {
+    return {
+        type: types.UPDATE_VALUE,
+        id: id,
+        value: value,
+    }
+}
+

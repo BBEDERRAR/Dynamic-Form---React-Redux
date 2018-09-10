@@ -29,19 +29,7 @@ class ConfigurationManager extends React.Component {
     }
 
 
-    componentWillMount() {
-        // store.formReducer().dispatch()
-        //
-        // console.log(this.props)
-        // var field = {
-        //     name: 'filed',
-        //     type: 'text',
-        //     label: 'Allad',
-        //     other: {}
-        // };
-        // this.props.addField(field)
 
-    }
 
 
     render() {
@@ -51,9 +39,10 @@ class ConfigurationManager extends React.Component {
                 <span className="m-2">label : {configuration.label}</span>|
                 <span className="m-2">type : {configuration.type}</span>
                 <br/>
-                <button className="btn btn-danger" onClick={()=>{
+                <button className="btn btn-danger" onClick={() => {
                     this.props.deleteField(configuration.id)
-                }}>delete</button>
+                }}>delete
+                </button>
                 <hr/>
             </div>
         );
@@ -63,6 +52,23 @@ class ConfigurationManager extends React.Component {
                 <h1>Configuration Manager</h1>
                 <div className="alert alert-success">
                     This Configuration Manager is a simulation to the configuration get it from the API
+                </div>
+                <hr/>
+                <div className="form-group">
+                    <label>Action</label>
+                    <input value={this.props.action} onChange={(event) => {
+                        this.props.editAction(event.target.value)
+                    }} className="form-control" type="text"/>
+                </div>
+                <div className="form-group">
+                    <label>Method</label>
+                    <select value={this.props.method} onChange={(event) => {this.props.editMethod(event.target.value)}} className="form-control">
+                        <option value="get">get</option>
+                        <option value="post">post</option>
+                        <option value="patch">patch</option>
+                        <option value="put">put</option>
+                        <option value="delete">delete</option>
+                    </select>
                 </div>
                 <hr/>
                 <h2>Add Input</h2>
@@ -98,10 +104,12 @@ class ConfigurationManager extends React.Component {
                         <option value="single-select">single-select</option>
                         <option value="radio">radio</option>
                         <option value="checkbox">checkbox</option>
+                        <option value="file">file</option>
+                        <option value="date">date</option>
                     </select>
                 </div>
 
-                {(this.state.field.type === 'single-select' || this.state.field.type === 'multi-select' || this.state.field.type === 'single-select' || this.state.field.type === 'radio' || this.state.field.type === 'checkbox' ) ?
+                {(this.state.field.type === 'single-select' || this.state.field.type === 'multi-select' || this.state.field.type === 'single-select' || this.state.field.type === 'radio' ) ?
                     <div className="form-group">
                         <label className="text-primary">Options</label>
                         <div className="row">
@@ -159,7 +167,9 @@ class ConfigurationManager extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        configurations: state.formReducer,
+        configurations: state.formReducer.configurations,
+        action: state.formReducer.action,
+        method: state.formReducer.method,
         field: {
             name: '',
             type: 'text',

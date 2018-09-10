@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import Select from 'react-select';
+import {connect} from 'react-redux'
+import * as actions from '../actions'
 
 class Field extends Component {
 
@@ -7,7 +9,7 @@ class Field extends Component {
         function radios(configuration) {
             return configuration.options.map((option, index) =>
                 <div className="form-check" key={index}>
-                    <input name={configuration.name}  type="radio" className="form-check-input" value={option.value}/>
+                    <input name={configuration.name} type="radio" className="form-check-input" value={option.value}/>
                     <label className="form-check-label">
                         {option.label}
                     </label>
@@ -15,50 +17,18 @@ class Field extends Component {
             );
         }
 
-        function checkboxes(configuration) {
-            return configuration.options.map((option, index) =>
-                <div className="form-check" key={index}>
-                    <input name={configuration.name}  type="checkbox" className="form-check-input" value={option.value}/>
-                    <label className="form-check-label">
-                        {option.label}
-                    </label>
-                </div>
-            );
-        }
 
-        function inputType(configuration) {
-            // console.log(configuration.type)
+        function inputType(props) {
+            var configuration = props.configuration
             let input = null
-            if (configuration.type === 'email') {
+            if (configuration.type === 'date' || configuration.type === 'email' || configuration.type === 'number' || configuration.type === 'text' || configuration.type === 'password') {
                 input =
                     (
                         <div>
                             <label>{configuration.label}</label>
-                            <input type="email" className="form-control"/>
-                        </div>
-                    )
-            } else if (configuration.type === 'text') {
-                input =
-                    (
-                        <div>
-                            <label>{configuration.label}</label>
-                            <input type="text" className="form-control"/>
-                        </div>
-                    )
-            } else if (configuration.type === 'password') {
-                input =
-                    (
-                        <div>
-                            <label>{configuration.label}</label>
-                            <input type="password" className="form-control"/>
-                        </div>
-                    )
-            } else if (configuration.type === 'number') {
-                input =
-                    (
-                        <div>
-                            <label>{configuration.label}</label>
-                            <input type="number" className="form-control"/>
+                            <input onChange={(event) => {
+                                props.updateValue(configuration.id, event.target.value)
+                            }} type={configuration.type} name={configuration.name} className="form-control"/>
                         </div>
                     )
             } else if (configuration.type === 'radio') {
@@ -74,8 +44,16 @@ class Field extends Component {
                 input =
                     (
                         <div>
-                            <label>{configuration.label}</label>
-                            {checkboxes(configuration)}
+                            <div className="form-check">
+                                <input name={configuration.name} type="checkbox" className="form-check-input"
+                                       onChange={(event) => {
+                                           props.updateValue(configuration.id, event.target.value)
+                                       }}
+                                />
+                                <label className="form-check-label">
+                                    {configuration.label}
+                                </label>
+                            </div>
                         </div>
                     )
             } else if (configuration.type === 'single-select') {
@@ -83,9 +61,12 @@ class Field extends Component {
                     (
                         <div>
                             <label>{configuration.label}</label>
-                            <Select
-                                isSearchable="true"
-                                options={configuration.options}
+                            <Select name={configuration.name}
+                                    onChange={(event) => {
+                                        props.updateValue(configuration.id, event.value)
+                                    }}
+                                    isSearchable="true"
+                                    options={configuration.options}
                             />
                         </div>
                     )
@@ -94,10 +75,14 @@ class Field extends Component {
                     (
                         <div>
                             <label>{configuration.label}</label>
-                            <Select
-                                isSearchable="true"
-                                isMulti="true"
-                                options={configuration.options}
+                            <Select name={configuration.name}
+                                    onChange={(event) => {
+                                        console.log(event)
+                                        props.updateValue(configuration.id, event)
+                                    }}
+                                    isSearchable="true"
+                                    isMulti="true"
+                                    options={configuration.options}
                             />
                         </div>
                     )
@@ -107,17 +92,37 @@ class Field extends Component {
                     (
                         <div>
                             <label>{configuration.label}</label>
-                            <textarea className="form-control"></textarea>
+                            <textarea name={configuration.name} className="form-control"
+                                      onChange={(event) => {
+                                          props.updateValue(configuration.id, event.target.value)
+                                      }}
+                            ></textarea>
+                        </div>
+                    )
+            } else if (configuration.type === 'file') {
+                input =
+                    (
+                        <div>
+                            <label>{configuration.label}</label>
+                            <input onChange={(event) => {
+                                props.updateValue(configuration.id, event.target.files[0])
+                            }} type={configuration.type} name={configuration.name} className="form-control"/>
                         </div>
                     )
             }
             return input
         }
 
-        return inputType(this.props.configuration)
+        return inputType(this.props)
     }
 
 
 }
 
-export default Field;
+const mapStateToProps = state => {
+    return {
+        configurations: state.formReducer.configurations,
+    }
+};
+export default connect(mapStateToProps, actions)(Field);
+

@@ -38,7 +38,68 @@ This project is dynamic form programming using react and redux your input will b
              required: true,
              regex:'^([a-z0-9]{5,})$',
              other: []
-         }
+         }, {
+                      id: 4,
+                      name: 'single',
+                      type: 'single-select',
+                      label: 'Single Select',
+                      value: null,
+                      required: true,
+                      regex:'^([a-z0-9]{5,})$',
+                      options: [
+                          {
+                              label: 'label 1',
+                              value: 'value 1'
+                          },
+                          {
+                              label: 'label 2',
+                              value: 'value 2'
+                          },
+                          {
+                              label: 'label 3',
+                              value: 'value 3'
+                          },
+                          {
+                              label: 'label 4',
+                              value: 'value 4'
+                          },
+                          {
+                              label: 'label 5',
+                              value: 'value 5'
+                          }
+                      ]
+          
+                  }, {
+                      id: 5,
+                      name: 'multiple',
+                      type: 'multiple-select',
+                      label: 'Multiple Select',
+                      value: null,
+                      regex:'^([a-z0-9]{5,})$',
+                      options: [
+                          {
+                              label: 'label 1',
+                              value: 'value 1'
+                          },
+                          {
+                              label: 'label 2',
+                              value: 'value 2'
+                          },
+                          {
+                              label: 'label 3',
+                              value: 'value 3'
+                          },
+                          {
+                              label: 'label 4',
+                              value: 'value 4'
+                          },
+                          {
+                              label: 'label 5',
+                              value: 'value 5'
+                          }
+                      ]
+          
+                  }
       ]
  }
  ```

@@ -52,7 +52,7 @@ class ConfigurationManager extends React.Component {
             <div className="col-md-4 text-center">
                 <h1>Configuration Manager</h1>
                 <div className="alert alert-success">
-                    This Configuration Manager is a simulation to the configuration get it from the API
+                    This Configuration Manager is a simulation to the configuration get it from the API (For the test)
                 </div>
                 <hr/>
                 <div className="form-group">

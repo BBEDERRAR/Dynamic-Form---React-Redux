@@ -7,14 +7,28 @@ import * as actions from '../actions'
 import validator from 'validator'
 
 class From extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            errors: []
+        }
+    }
+
     handleSubmit = (event) => {
         event.preventDefault()
 
         // Test Regex and Validation
         var valid = true;
+
+        this.state = {
+            errors: []
+        }
         valid = validator.isURL(this.props.action); //=> true
         if (!valid) {
-            alert("the URL is not valid");
+            this.setState({
+                errors: [...this.state.errors, "the URL is not valid"]
+            })
         } else {
             for (var i = 0; i < this.props.configurations.length; i++) {
                 var configuration = this.props.configurations[i]
@@ -24,26 +38,34 @@ class From extends Component {
                         var re = new RegExp(configuration.regex);
                         valid = re.test(term)
                         if (!valid) {
-                            alert(configuration.label + " is not respect the format " + configuration.regex);
+                            this.setState({
+                                errors: [...this.state.errors, configuration.label + " is not respect the format " + configuration.regex]
+                            })
                             break;
                         }
                     } else if (configuration.type === 'email') {
                         valid = validator.isEmail(configuration.value); //=> true
                         if (!valid) {
-                            alert(configuration.label + " is not an email");
+                            this.setState({
+                                errors: [...this.state.errors, configuration.label + " is not an email"]
+                            })
                             break;
                         }
                     } else if (configuration.type === 'number') {
                         valid = validator.isNumeric(configuration.value); //=> true
                         if (!valid) {
-                            alert(configuration.label + " is not a number");
+                            this.setState({
+                                errors: [...this.state.errors, configuration.label + " is not a number"]
+                            })
                             break;
                         }
                     }
 
                 } else if (configuration.required) {
                     valid = false
-                    alert(configuration.label + " is empty");
+                    this.setState({
+                        errors: [...this.state.errors, configuration.label + " is empty"]
+                    })
                     break;
                 }
             }
@@ -88,11 +110,24 @@ class From extends Component {
                 <Field configuration={configuration}/>
             </div>
         );
+        var errors =
+            (<div className="alert alert-danger ">
+                {
+                    this.state.errors.map((error, index) =>
+                        <li key={index}>
+                            {error}
+                        </li>
+                    )
+                }
+            </div>);
 
 
         return (
             <div className="col-md-8">
                 <h1>Form</h1>
+                {(this.state.errors.length > 0) ?
+                    errors
+                    : null}
                 <form id="form">
                     {formItems}
                     <div className="text-center">

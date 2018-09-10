@@ -82,6 +82,7 @@ class From extends Component {
                 form.append(configuration.name, configuration.value)
             }
         )
+        console.log(this.props)
 
         axios({
             method: this.props.method,

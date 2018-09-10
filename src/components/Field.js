@@ -47,8 +47,9 @@ class Field extends Component {
                             <div className="form-check">
                                 <input name={configuration.name} type="checkbox" className="form-check-input"
                                        onChange={(event) => {
-                                           props.updateValue(configuration.id, event.target.value)
+                                           props.updateValue(configuration.id, !configuration.value)
                                        }}
+                                       checked={configuration.value}
                                 />
                                 <label className="form-check-label">
                                     {configuration.label}

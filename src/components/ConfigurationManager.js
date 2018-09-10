@@ -38,6 +38,7 @@ class ConfigurationManager extends React.Component {
                 <span className="m-2">name : {configuration.name}</span>|
                 <span className="m-2">label : {configuration.label}</span>|
                 <span className="m-2">type : {configuration.type}</span>
+                <span className="m-2">required : {configuration.required?'true':'false'}</span>
                 <br/>
                 <button className="btn btn-danger" onClick={() => {
                     this.props.deleteField(configuration.id)
@@ -89,6 +90,17 @@ class ConfigurationManager extends React.Component {
                     }} className="form-control" type="text"/>
                 </div>
                 <div className="form-group">
+                    <label>Required</label>
+                    <select value={this.state.field.required} onChange={(event) => {
+                        this.setState({
+                            field: {...this.state.field, required: (event.target.value==='true')?1:0}
+                        });
+                    }} className="form-control" >
+                        <option value="1">True</option>
+                        <option value="0">False</option>
+                    </select>
+                </div>
+                <div className="form-group">
                     <label>Type</label>
                     <select value={this.state.field.type} onChange={(event) => {
                         this.setState({
@@ -108,7 +120,17 @@ class ConfigurationManager extends React.Component {
                         <option value="date">date</option>
                     </select>
                 </div>
+                { (this.state.field.type === 'text')?
+                    <div className="form-group">
+                        <label>Regex</label>
+                        <input value={this.state.field.regex} onChange={(event) => {
+                        this.setState({
+                            field: {...this.state.field, regex: event.target.value}
+                        });
+                    }} className="form-control" type="text"/>
 
+                    </div>
+                    : null}
                 {(this.state.field.type === 'single-select' || this.state.field.type === 'multi-select' || this.state.field.type === 'single-select' || this.state.field.type === 'radio' ) ?
                     <div className="form-group">
                         <label className="text-primary">Options</label>
@@ -174,6 +196,8 @@ const mapStateToProps = state => {
             name: '',
             type: 'text',
             label: '',
+            required: true,
+            regex: '^([a-z0-9]',
             options: []
         }
     }

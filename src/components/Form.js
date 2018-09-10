@@ -4,33 +4,63 @@ import Field from './Field';
 import axios from 'axios';
 import FormData from 'form-data'
 import * as actions from '../actions'
+import validator from 'validator'
 
 class From extends Component {
     handleSubmit = (event) => {
         event.preventDefault()
 
-        // Test Regex
-        for (var i = 0; i < this.props.configurations.length; i++) {
-            var configuration=this.props.configurations[i]
-            var term = configuration.value;
-            var re = new RegExp(configuration.regex);
-            if (!re.test(term)) {
-                alert(configuration.label + "is not valid");
-                var valid = false;
-                break;
-            }else {
-                alert(configuration.label + "is valid");
+        // Test Regex and Validation
+        var valid = true;
+        valid = validator.isURL(this.props.action); //=> true
+        if (!valid) {
+            alert("the URL is not valid");
+        } else {
+            for (var i = 0; i < this.props.configurations.length; i++) {
+                var configuration = this.props.configurations[i]
+                if (configuration.value) {
+                    if (configuration.type === 'text') {
+                        var term = configuration.value;
+                        var re = new RegExp(configuration.regex);
+                        valid = re.test(term)
+                        if (!valid) {
+                            alert(configuration.label + " is not respect the format " + configuration.regex);
+                            break;
+                        }
+                    } else if (configuration.type === 'email') {
+                        valid = validator.isEmail(configuration.value); //=> true
+                        if (!valid) {
+                            alert(configuration.label + " is not an email");
+                            break;
+                        }
+                    } else if (configuration.type === 'number') {
+                        valid = validator.isNumeric(configuration.value); //=> true
+                        if (!valid) {
+                            alert(configuration.label + " is not a number");
+                            break;
+                        }
+                    }
 
+                } else if (configuration.required) {
+                    valid = false
+                    alert(configuration.label + " is empty");
+                    break;
+                }
             }
+
         }
+
+
         if (!valid)
             return false
 
-        var form = new FormData();
-        this.props.configurations.map((configuration) => {
+        var form = new FormData()
+        this.props.configurations.map(
+            (configuration) => {
                 form.append(configuration.name, configuration.value)
             }
-        );
+        )
+
         axios({
             method: this.props.method,
             url: this.props.action,
@@ -49,7 +79,8 @@ class From extends Component {
         })
 
 
-    };
+    }
+
 
     render() {
         const formItems = this.props.configurations.map((configuration, index) =>

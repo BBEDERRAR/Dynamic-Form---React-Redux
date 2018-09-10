@@ -1,7 +1,7 @@
 import * as types from '../constants/ActionTypes'
 
 const initialState = {
-    action: 'https://restcountries.eu/rest/v2/all',
+    action: '',
     method: 'get',
     configurations: [
 
@@ -11,6 +11,7 @@ const initialState = {
             type: 'email',
             label: 'Email',
             value: null,
+            required: true,
             regex:'^([a-z])$',
             other: []
         }, {
@@ -19,6 +20,7 @@ const initialState = {
             type: 'text',
             label: 'Text',
             value: null,
+            required: true,
             regex:'^([a-z0-9]{5,})$',
             other: []
         }, {
@@ -27,6 +29,7 @@ const initialState = {
             type: 'textarea',
             label: 'Textarea',
             value: null,
+            required: true,
             regex:'^([a-z0-9]{5,})$',
             other: []
         }, {
@@ -35,6 +38,7 @@ const initialState = {
             type: 'single-select',
             label: 'Single Select',
             value: null,
+            required: true,
             regex:'^([a-z0-9]{5,})$',
             options: [
                 {
@@ -106,6 +110,8 @@ export default function formReducer(state = initialState, action) {
                         name: action.payload.name,
                         type: action.payload.type,
                         label: action.payload.label,
+                        required: action.payload.required,
+                        regex: action.payload.regex,
                         value: null,
                         options: action.payload.options
                     }

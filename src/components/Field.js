@@ -78,8 +78,11 @@ class Field extends Component {
                             <label>{configuration.label}</label>
                             <Select name={configuration.name}
                                     onChange={(event) => {
-                                        console.log(event)
-                                        props.updateValue(configuration.id, event)
+                                        var value='';
+                                        event.forEach(function(element) {
+                                            value+=element.value+'|';
+                                        });
+                                        props.updateValue(configuration.id, value)
                                     }}
                                     isSearchable="true"
                                     isMulti="true"

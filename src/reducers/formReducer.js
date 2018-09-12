@@ -20,7 +20,7 @@ const initialState = {
             id: 2,
             name: 'multiple',
             type: 'checkbox',
-            label: 'Multiple Select',
+            label: 'Checkbox',
             value: null,
             parent: 'true',
             parent_id: null,

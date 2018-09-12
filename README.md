@@ -1,105 +1,54 @@
 ## Description
 
-This project is dynamic form programming using react and redux your input will be a configuration that you receive from an API. This API will have the various fields in a page (take input, radio, checkbox, email, number, single select dropdown, multi select dropdown, file upload, text area etc), with various properties. For instance:
+This project is dynamic form programming using react and redux your input will be a configuration that you receive from an API. This API will have the various fields in a page (take input, radio, checkbox, email, number, single select dropdown, multi select dropdown, file upload, text area etc), with various properties. 
+
+- Data for dropdowns could be coming from an API or internal field
+- A dropdown could be searchable depending on the number of elements in dropdown (assume a reasonable threshold)
+- Regex value of a text field which validates the input being entered.
+- A field will also have dependent field which will be rendered based on value entered into the field. A checkbox upon checking true should render more fields.
  
  ## The Configurations
  This is an example of configuration get it from the API
 
  ```
  {
-     action: '',
-     method: 'get',
-     configurations: [
- 
-         {
-             id: 1,
-             name: 'email',
-             type: 'email',
-             label: 'Email',
-             value: null,
-             required: true,
-             regex:'^([a-z])$',
-             other: []
-         }, {
-             id: 2,
-             name: 'text',
-             type: 'text',
-             label: 'Text',
-             value: null,
-             required: true,
-             regex:'^([a-z0-9]{5,})$',
-             other: []
-         }, {
-             id: 3,
-             name: 'textarea',
-             type: 'textarea',
-             label: 'Textarea',
-             value: null,
-             required: true,
-             regex:'^([a-z0-9]{5,})$',
-             other: []
-         }, {
-                      id: 4,
-                      name: 'single',
-                      type: 'single-select',
-                      label: 'Single Select',
-                      value: null,
-                      required: true,
-                      regex:'^([a-z0-9]{5,})$',
-                      options: [
-                          {
-                              label: 'label 1',
-                              value: 'value 1'
-                          },
-                          {
-                              label: 'label 2',
-                              value: 'value 2'
-                          },
-                          {
-                              label: 'label 3',
-                              value: 'value 3'
-                          },
-                          {
-                              label: 'label 4',
-                              value: 'value 4'
-                          },
-                          {
-                              label: 'label 5',
-                              value: 'value 5'
-                          }
-                      ]
-          
-                  }, {
-                      id: 5,
-                      name: 'multiple',
-                      type: 'multiple-select',
-                      label: 'Multiple Select',
-                      value: null,
-                      regex:'^([a-z0-9]{5,})$',
-                      options: [
-                          {
-                              label: 'label 1',
-                              value: 'value 1'
-                          },
-                          {
-                              label: 'label 2',
-                              value: 'value 2'
-                          },
-                          {
-                              label: 'label 3',
-                              value: 'value 3'
-                          },
-                          {
-                              label: 'label 4',
-                              value: 'value 4'
-                          },
-                          {
-                              label: 'label 5',
-                              value: 'value 5'
-                          }
-                      ]
-          
-                  }
+      action: '',
+      method: 'get',
+      configurations: [
+            {
+                id: 1,
+                name: 'email',
+                type: 'email',
+                label: 'Email',
+                value: null,
+                required: true,
+                parent: 'true',
+                parent_id: null,
+                regex: '^([a-z])$',
+                other: []
+            }, {
+                id: 2,
+                name: 'multiple',
+                type: 'checkbox',
+                label: 'Checkbox',
+                value: null,
+                parent: 'true',
+                parent_id: null,
+                regex: '^([a-z0-9]{5,})$',
+                options: []
+            },
+            {
+                id: 3,
+                name: 'textarea',
+                type: 'textarea',
+                label: 'Textarea',
+                value: null,
+                required: true,
+                parent: 'false',
+                parent_id: 2,
+                regex: '^([a-z])$',
+                other: []
+            }
       ]
  }
  ```

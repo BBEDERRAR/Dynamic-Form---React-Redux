@@ -26,7 +26,7 @@ describe('form reducer', () => {
                         id: 2,
                         name: 'multiple',
                         type: 'checkbox',
-                        label: 'Multiple Select',
+                        label: 'Checkbox',
                         value: null,
                         parent: 'true',
                         parent_id: null,
@@ -83,7 +83,7 @@ describe('form reducer', () => {
                     "value": null
                 }, {
                     "id": 2,
-                    "label": "Multiple Select",
+                    "label": "Checkbox",
                     "name": "multiple",
                     "options": [],
                     "parent": "true",
@@ -169,7 +169,7 @@ describe('form reducer', () => {
                         id: 2,
                         name: 'multiple',
                         type: 'checkbox',
-                        label: 'Multiple Select',
+                        label: 'Checkbox',
                         value: null,
                         parent: 'true',
                         parent_id: null,

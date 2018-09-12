@@ -1,7 +1,7 @@
 import * as types from '../constants/ActionTypes'
 import * as actions from './index'
 
-describe('todo actions', () => {
+describe('actions test', () => {
     it('addField should create CREATE_FIELD action', () => {
         expect(actions.addField({})).toEqual( {
             type: types.CREATE_FIELD,

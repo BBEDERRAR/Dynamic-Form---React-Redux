@@ -10,10 +10,14 @@ class From extends Component {
 
     constructor(props) {
         super(props)
+
         this.state = {
             errors: []
         }
+
+
     }
+
 
     handleSubmit = (event) => {
         event.preventDefault()
@@ -105,10 +109,10 @@ class From extends Component {
 
 
     render() {
-        const formItems = this.props.configurations.map((configuration, index) =>
-            <div className="form-group" key={index}>
+        var formItems = this.props.configurations.map((configuration, index) =>
+            (configuration.parent==='true' || this.props.configurations.find(x => (x.id === configuration.parent_id) && x.value))?(<div className="form-group" key={index}>
                 <Field configuration={configuration}/>
-            </div>
+            </div>):null
         );
         var errors =
             (<div className="alert alert-danger ">

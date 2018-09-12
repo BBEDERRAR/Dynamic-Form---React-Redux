@@ -21,24 +21,26 @@ class ConfigurationManager extends React.Component {
         this.setState({
             field: {
                 name: '',
-                label: '',
                 type: 'text',
+                label: '',
+                required: true,
+                parent_id: null,
+                parent: 'true',
+                regex: '^([a-z0-9]',
                 options: []
             }
         });
     }
 
 
-
-
-
     render() {
         const configurations = this.props.configurations.map((configuration, index) =>
             <div className="form-group" key={index}>
-                <span className="m-2">name : {configuration.name}</span>|
-                <span className="m-2">label : {configuration.label}</span>|
-                <span className="m-2">type : {configuration.type}</span>
-                <span className="m-2">required : {configuration.required?'true':'false'}</span>
+                <span className="m-2"><strong>name : </strong>{configuration.name}</span>|
+                <span className="m-2"><strong>label : </strong>{configuration.label}</span>|
+                <span className="m-2"><strong>type : </strong>{configuration.type}</span>|
+                <span className="m-2"><strong>required : </strong>{configuration.required ? 'true' : 'false'}</span>|
+                <span className="m-2"><strong> {configuration.parent==='true' ? 'Parent' : 'Child'}</strong></span>
                 <br/>
                 <button className="btn btn-danger" onClick={() => {
                     this.props.deleteField(configuration.id)
@@ -47,9 +49,15 @@ class ConfigurationManager extends React.Component {
                 <hr/>
             </div>
         );
+        const checkboxes = this.props.configurations.map((configuration, index) =>
+            (configuration.type === 'checkbox') ?
+                <option value={configuration.id}>{configuration.label}</option>
+                : null
+        )
 
         return (
             <div className="col-md-4 text-center">
+
                 <h1>Configuration Manager</h1>
                 <div className="alert alert-success">
                     This Configuration Manager is a simulation to the configuration get it from the API (For the test)
@@ -63,7 +71,9 @@ class ConfigurationManager extends React.Component {
                 </div>
                 <div className="form-group">
                     <label>Method</label>
-                    <select value={this.props.method} onChange={(event) => {this.props.editMethod(event.target.value)}} className="form-control">
+                    <select value={this.props.method} onChange={(event) => {
+                        this.props.editMethod(event.target.value)
+                    }} className="form-control">
                         <option value="get">get</option>
                         <option value="post">post</option>
                         <option value="patch">patch</option>
@@ -93,9 +103,9 @@ class ConfigurationManager extends React.Component {
                     <label>Required</label>
                     <select value={this.state.field.required} onChange={(event) => {
                         this.setState({
-                            field: {...this.state.field, required: (event.target.value==='true')?1:0}
+                            field: {...this.state.field, required: (event.target.value === 'true') ? 1 : 0}
                         });
-                    }} className="form-control" >
+                    }} className="form-control">
                         <option value="1">True</option>
                         <option value="0">False</option>
                     </select>
@@ -120,15 +130,40 @@ class ConfigurationManager extends React.Component {
                         <option value="date">date</option>
                     </select>
                 </div>
-                { (this.state.field.type === 'text')?
+                <div className="form-group">
+                    <label>Parent / Child</label>
+                    <select value={this.state.field.parent} onChange={(event) => {
+                        this.setState({
+                            field: {...this.state.field, parent: event.target.value}
+                        });
+                    }} className="form-control">
+                        <option value={true}>Parent</option>
+                        <option value={false}>Child</option>
+                    </select>
+                </div>
+                {(this.state.field.type === 'text') ?
                     <div className="form-group">
                         <label>Regex</label>
                         <input value={this.state.field.regex} onChange={(event) => {
-                        this.setState({
-                            field: {...this.state.field, regex: event.target.value}
-                        });
-                    }} className="form-control" type="text"/>
+                            this.setState({
+                                field: {...this.state.field, regex: event.target.value}
+                            });
+                        }} className="form-control" type="text"/>
 
+                    </div>
+                    : null}
+                {(this.state.field.parent === 'false') ?
+                    <div className="form-group">
+                        <label>Parent</label>
+                        <select value={this.state.field.parent_id} onChange={(event) => {
+                            this.setState({
+                                field: {...this.state.field, parent_id: parseInt(event.target.value)}
+                            });
+                            console.log(this.state.field)
+                        }} className="form-control">
+                            <option value="0"></option>
+                            {checkboxes}
+                        </select>
                     </div>
                     : null}
                 {(this.state.field.type === 'single-select' || this.state.field.type === 'multi-select' || this.state.field.type === 'single-select' || this.state.field.type === 'radio' ) ?
@@ -172,11 +207,12 @@ class ConfigurationManager extends React.Component {
 
                     : null}
 
-                <button disabled={this.state.field.label === '' || this.state.field.name === ''}
-                        className="btn btn-primary"
-                        onClick={(event) => {
-                            this.addField(event)
-                        }}>Add Field
+                <button
+                    disabled={this.state.field.label === '' || this.state.field.name === '' || (this.state.field.parent === 'false' && this.state.field.parent_id <= 0)}
+                    className="btn btn-primary"
+                    onClick={(event) => {
+                        this.addField(event)
+                    }}>Add Field
                 </button>
 
                 <hr/>
@@ -197,6 +233,8 @@ const mapStateToProps = state => {
             type: 'text',
             label: '',
             required: true,
+            parent_id: null,
+            parent: 'true',
             regex: '^([a-z0-9]',
             options: []
         }

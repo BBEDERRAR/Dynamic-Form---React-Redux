@@ -100,7 +100,7 @@ class Field extends Component {
                                       onChange={(event) => {
                                           props.updateValue(configuration.id, event.target.value)
                                       }}
-                            ></textarea>
+                            />
                         </div>
                     )
             } else if (configuration.type === 'file') {

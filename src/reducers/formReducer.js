@@ -12,87 +12,33 @@ const initialState = {
             label: 'Email',
             value: null,
             required: true,
+            parent: 'true',
+            parent_id: null,
             regex:'^([a-z])$',
             other: []
-        }, {
+        },  {
             id: 2,
-            name: 'text',
-            type: 'text',
-            label: 'Text',
+            name: 'multiple',
+            type: 'checkbox',
+            label: 'Multiple Select',
             value: null,
-            required: true,
+            parent: 'true',
+            parent_id: null,
             regex:'^([a-z0-9]{5,})$',
-            other: []
-        }, {
+            options: []
+
+        },
+        {
             id: 3,
             name: 'textarea',
             type: 'textarea',
             label: 'Textarea',
             value: null,
             required: true,
-            regex:'^([a-z0-9]{5,})$',
+            parent: 'false',
+            parent_id: 2,
+            regex:'^([a-z])$',
             other: []
-        }, {
-            id: 4,
-            name: 'single',
-            type: 'single-select',
-            label: 'Single Select',
-            value: null,
-            required: true,
-            regex:'^([a-z0-9]{5,})$',
-            options: [
-                {
-                    label: 'label 1',
-                    value: 'value 1'
-                },
-                {
-                    label: 'label 2',
-                    value: 'value 2'
-                },
-                {
-                    label: 'label 3',
-                    value: 'value 3'
-                },
-                {
-                    label: 'label 4',
-                    value: 'value 4'
-                },
-                {
-                    label: 'label 5',
-                    value: 'value 5'
-                }
-            ]
-
-        }, {
-            id: 5,
-            name: 'multiple',
-            type: 'multiple-select',
-            label: 'Multiple Select',
-            value: null,
-            regex:'^([a-z0-9]{5,})$',
-            options: [
-                {
-                    label: 'label 1',
-                    value: 'value 1'
-                },
-                {
-                    label: 'label 2',
-                    value: 'value 2'
-                },
-                {
-                    label: 'label 3',
-                    value: 'value 3'
-                },
-                {
-                    label: 'label 4',
-                    value: 'value 4'
-                },
-                {
-                    label: 'label 5',
-                    value: 'value 5'
-                }
-            ]
-
         }
 
     ]
@@ -112,6 +58,8 @@ export default function formReducer(state = initialState, action) {
                         label: action.payload.label,
                         required: action.payload.required,
                         regex: action.payload.regex,
+                        parent: action.payload.parent,
+                        parent_id: action.payload.parent_id,
                         value: null,
                         options: action.payload.options
                     }
@@ -120,8 +68,9 @@ export default function formReducer(state = initialState, action) {
         case types.DELETE_FIELD:
             return {
                 ...state, configurations: state.configurations.filter(field =>
-                    field.id !== action.payload
+                    field.id !== action.payload &&  field.parent_id !== action.payload
                 )
+
             }
 
         case types.EDIT_FIELD:
@@ -133,6 +82,8 @@ export default function formReducer(state = initialState, action) {
                         type: action.type,
                         label: action.label,
                         value: action.value,
+                        parent: action.parent,
+                        parent_id: action.parent_id,
                         options: action.options
                     } : field
                 )
